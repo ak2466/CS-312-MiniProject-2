@@ -45,8 +45,18 @@ async function initializeApp() {
                 // Get the category
                 let category = req.body.category;
 
-                const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`)
-                const jokeData = response.data
+                let jokeData = null;
+
+                if (category) {
+                    const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`)
+                    jokeData = response.data
+                }
+                else {
+                    const response = await axios.get(`https://v2.jokeapi.dev/joke/Any`)
+                    jokeData = response.data
+                }
+
+                console.log(jokeData);
 
                 res.render('index.ejs', {jokeCategories: categories, joke: jokeData, error: null})
 
