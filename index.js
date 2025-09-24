@@ -35,7 +35,26 @@ async function initializeApp() {
         app.get('/', (req, res) => {
             
             // Pass categories to view
-            res.render('index.ejs', {jokeCategories: categories})
+            res.render('index.ejs', {jokeCategories: categories, joke: null, error: null})
+        })
+
+        // Define post route
+        app.post('/submit', async (req, res) => {
+            try {
+
+                // Get the category
+                let category = req.body.category;
+
+                const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`)
+                const jokeData = response.data
+
+                res.render('index.ejs', {jokeCategories: categories, joke: jokeData, error: null})
+
+            }
+            catch (error) {
+                console.log("An error occured in the post route: ", error)
+                res.render('index.ejs', {jokeCategories: categories, joke: null, error: error})
+            }
         })
 
         // Start the app
@@ -52,14 +71,3 @@ async function initializeApp() {
 }
 
 initializeApp();
-
-app.post('/submit', (req, res) => {
-
-    // Get the category
-    let category = req.body.category;
-    
-    // Redirect the user
-    res.redirect('/');
-
-    // Send the API request
-})
