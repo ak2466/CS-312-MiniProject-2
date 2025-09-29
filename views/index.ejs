@@ -11,18 +11,21 @@
         <h1>Joke Finder</h1>
     </div>
     <div class="container">
+    <div class="categories">
     <h3>Categories:</h3>
     <form action="/submit" method="POST">
     <% jokeObject.categories.forEach(category => { %>
-     <input type="radio" id="<%= category %>" name="category" value="<%= category %>">
-     <label for="<%= category %>"><%= category %></label>
-     <br>
-    <% }) %>
-    <br><br>
+        <div class="joke-category">
+            <input type="radio" id="<%= category %>" name="category" value="<%= category %>">
+            <label for="<%= category %>"><%= category %></label>
+        </div>
+            <% }) %>
     <button type="submit">Get a joke!</button>
+    </div>
     </form>
 
     <% if (jokeObject.jokeData) {%>
+        <div class="joke">
         <h3>Your joke:</h3>
         <% if (jokeObject.jokeData.type === 'single' ) { %>
             <p> <%= jokeObject.jokeData.joke %></p>
@@ -34,6 +37,7 @@
     <% if (jokeObject.error) {%>
         <p> Error occured: <%= error %></p>
     <% }%>
+    </div>
     </div>
 </body>
 </html>
