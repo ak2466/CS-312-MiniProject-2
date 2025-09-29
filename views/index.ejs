@@ -13,7 +13,7 @@
     <div class="container">
     <h3>Categories:</h3>
     <form action="/submit" method="POST">
-    <% jokeCategories.forEach(category => { %>
+    <% jokeObject.categories.forEach(category => { %>
      <input type="radio" id="<%= category %>" name="category" value="<%= category %>">
      <label for="<%= category %>"><%= category %></label>
      <br>
@@ -22,16 +22,16 @@
     <button type="submit">Get a joke!</button>
     </form>
 
-    <% if (joke) {%>
+    <% if (jokeObject.jokeData) {%>
         <h3>Your joke:</h3>
-        <% if (joke.type === 'single' ) { %>
-            <p> <%= joke.joke %></p>
-        <% } else if (joke.type === 'twopart') {%>
-            <p><%= joke.setup %></p>
-            <p><%= joke.delivery %></p>
+        <% if (jokeObject.jokeData.type === 'single' ) { %>
+            <p> <%= jokeObject.jokeData.joke %></p>
+        <% } else if (jokeObject.jokeData.type === 'twopart') {%>
+            <p><%= jokeObject.jokeData.setup %></p>
+            <p><%= jokeObject.jokeData.delivery %></p>
         <% } %>
     <% } %>
-    <% if (error) {%>
+    <% if (jokeObject.error) {%>
         <p> Error occured: <%= error %></p>
     <% }%>
     </div>

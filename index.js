@@ -21,7 +21,11 @@ app.use(express.static('static'))
 app.use(express.json());
 
 // Define array for joke categories
-let categories = []
+const jokeObject = {
+    categories: [],
+    jokeData: null,
+    error: null
+}
 
 // Define asynchronous block
 async function initializeApp() {
@@ -29,13 +33,13 @@ async function initializeApp() {
 
         // Try to get the joke categories from axios and save them in an array
         const response = await axios.get('https://v2.jokeapi.dev/categories');
-        categories = response.data.categories
+        jokeObject.categories = response.data.categories
 
         // Define get route
         app.get('/', (req, res) => {
             
             // Pass categories to view
-            res.render('index.ejs', {jokeCategories: categories, joke: null, error: null})
+            res.render('index.ejs', {jokeObject: jokeObject})
         })
 
         // Define post route
@@ -45,25 +49,25 @@ async function initializeApp() {
                 // Get the category
                 let category = req.body.category;
 
-                let jokeData = null;
-
                 if (category) {
                     const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`)
-                    jokeData = response.data
+                    jokeObject.jokeData = response.data
                 }
                 else {
                     const response = await axios.get(`https://v2.jokeapi.dev/joke/Any`)
-                    jokeData = response.data
+                    jokeObject.jokeData = response.data
                 }
 
-                console.log(jokeData);
+                console.log(jokeObject.jokeData);
 
-                res.render('index.ejs', {jokeCategories: categories, joke: jokeData, error: null})
+
+                res.render('index.ejs', {jokeObject: jokeObject})
 
             }
             catch (error) {
                 console.log("An error occured in the post route: ", error)
-                res.render('index.ejs', {jokeCategories: categories, joke: null, error: error})
+                jokeObject.error = error
+                res.render('index.ejs', {jokeObject: jokeObject})
             }
         })
 
