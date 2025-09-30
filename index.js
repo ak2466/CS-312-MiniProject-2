@@ -39,7 +39,14 @@ async function initializeApp() {
         app.get('/', (req, res) => {
             
             // Pass categories to view
-            res.render('index.ejs', {jokeObject: jokeObject})
+            res.render('index.ejs')
+        })
+
+        // Define get joke route
+        app.get('/get-joke', (req, res) => {
+
+            res.render('get-joke.ejs', {jokeObject: jokeObject})
+
         })
 
         // Define post route
@@ -49,25 +56,38 @@ async function initializeApp() {
                 // Get the category
                 let category = req.body.category;
 
+                // If category exists
                 if (category) {
+
+                    // Send category and get response
                     const response = await axios.get(`https://v2.jokeapi.dev/joke/${category}`)
                     jokeObject.jokeData = response.data
                 }
+
+                // Otherwise
                 else {
+
+                    // Get any joke
                     const response = await axios.get(`https://v2.jokeapi.dev/joke/Any`)
                     jokeObject.jokeData = response.data
                 }
 
+                // Log joke to server console
                 console.log(jokeObject.jokeData);
 
-
-                res.render('index.ejs', {jokeObject: jokeObject})
+                // Rerender the get-joke template with the new joke data
+                res.render('get-joke.ejs', {jokeObject: jokeObject})
 
             }
+            // catch any errors
             catch (error) {
+
+                // Log the error to the server's console
                 console.log("An error occured in the post route: ", error)
                 jokeObject.error = error
-                res.render('index.ejs', {jokeObject: jokeObject})
+
+                // Render the error on the client side
+                res.render('get-joke.ejs', {jokeObject: jokeObject})
             }
         })
 
@@ -78,6 +98,8 @@ async function initializeApp() {
 
 
     }
+
+    // Handle errors for the asynchronous function
     catch (error) {
         // Log the error
         console.log(`Error occured: ${error}`)

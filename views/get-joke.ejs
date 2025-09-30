@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joke Finder</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Joke Finder</h1>
+    </div>
+    <div class="container">
+    <h3>Categories:</h3>
+    <form action="/submit" method="POST">
+    <div class="joke-categories-container">
+        <% jokeObject.categories.forEach(category => { %>
+            <div class="joke-category">
+                <input type="radio" id="<%= category %>" name="category" value="<%= category %>">
+                <label for="<%= category %>"><%= category %></label>
+            </div>
+                <% }) %>
+    </div>
+    <div class="main-button-container">
+        <button class="main-button" type="submit">Get a joke!</button>
+    </div>
+    </form>
+
+    <% if (jokeObject.jokeData) {%>
+        <div class="joke">
+        <h3>Your joke:</h3>
+        <% if (jokeObject.jokeData.type === 'single' ) { %>
+            <p> <%= jokeObject.jokeData.joke %></p>
+        <% } else if (jokeObject.jokeData.type === 'twopart') {%>
+            <p><%= jokeObject.jokeData.setup %></p>
+            <p><%= jokeObject.jokeData.delivery %></p>
+        <% } %>
+    <% } %>
+    <% if (jokeObject.error) {%>
+        <p> Error occured: <%= error %></p>
+    <% }%>
+    </div>
+    </div>
+</body>
+</html>
